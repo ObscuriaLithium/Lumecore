@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "facing=north,lit=true,powered=false": { "model": "lumecore:block/wall_chandelier_lever_lit" },
+    "facing=north,lit=false,powered=false": { "model": "lumecore:block/wall_chandelier_lever" },
+    "facing=east,lit=true,powered=false": { "model": "lumecore:block/wall_chandelier_lever_lit", "y": 90 },
+    "facing=east,lit=false,powered=false": { "model": "lumecore:block/wall_chandelier_lever", "y": 90 },
+    "facing=south,lit=true,powered=false": { "model": "lumecore:block/wall_chandelier_lever_lit", "y": 180 },
+    "facing=south,lit=false,powered=false": { "model": "lumecore:block/wall_chandelier_lever", "y": 180 },
+    "facing=west,lit=true,powered=false": { "model": "lumecore:block/wall_chandelier_lever_lit", "y": 270 },
+    "facing=west,lit=false,powered=false": { "model": "lumecore:block/wall_chandelier_lever", "y": 270 },
+
+    "facing=north,lit=true,powered=true": { "model": "lumecore:block/wall_chandelier_lever_lit_powered" },
+    "facing=north,lit=false,powered=true": { "model": "lumecore:block/wall_chandelier_lever_powered" },
+    "facing=east,lit=true,powered=true": { "model": "lumecore:block/wall_chandelier_lever_lit_powered", "y": 90 },
+    "facing=east,lit=false,powered=true": { "model": "lumecore:block/wall_chandelier_lever_powered", "y": 90 },
+    "facing=south,lit=true,powered=true": { "model": "lumecore:block/wall_chandelier_lever_lit_powered", "y": 180 },
+    "facing=south,lit=false,powered=true": { "model": "lumecore:block/wall_chandelier_lever_powered", "y": 180 },
+    "facing=west,lit=true,powered=true": { "model": "lumecore:block/wall_chandelier_lever_lit_powered", "y": 270 },
+    "facing=west,lit=false,powered=true": { "model": "lumecore:block/wall_chandelier_lever_powered", "y": 270 }
+  }
+}

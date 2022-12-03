@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,lit=true": { "model": "lumecore:block/wall_chandelier_mono_lit" },
+    "facing=north,lit=false": { "model": "lumecore:block/wall_chandelier_mono" },
+    "facing=east,lit=true": { "model": "lumecore:block/wall_chandelier_mono_lit", "y": 90 },
+    "facing=east,lit=false": { "model": "lumecore:block/wall_chandelier_mono", "y": 90 },
+    "facing=south,lit=true": { "model": "lumecore:block/wall_chandelier_mono_lit", "y": 180 },
+    "facing=south,lit=false": { "model": "lumecore:block/wall_chandelier_mono", "y": 180 },
+    "facing=west,lit=true": { "model": "lumecore:block/wall_chandelier_mono_lit", "y": 270 },
+    "facing=west,lit=false": { "model": "lumecore:block/wall_chandelier_mono", "y": 270 }
+  }
+}
