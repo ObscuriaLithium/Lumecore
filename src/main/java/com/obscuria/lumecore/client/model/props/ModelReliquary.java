@@ -1,8 +1,9 @@
-package com.obscuria.lumecore.client.model;
+package com.obscuria.lumecore.client.model.props;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.obscuria.lumecore.world.entities.ReliquaryEntity;
+import com.obscuria.lumecore.LumecoreMod;
+import com.obscuria.lumecore.world.entities.props.ReliquaryEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -12,10 +13,11 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 public class ModelReliquary<T extends Entity> extends EntityModel<T> {
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation
-            ("lumecore", "model_reliquary"), "main");
+    public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation
+            (LumecoreMod.MODID, "model_reliquary"), "main");
 
     private final ModelPart main, bottom, top;
 
@@ -55,12 +57,12 @@ public class ModelReliquary<T extends Entity> extends EntityModel<T> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay,
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumer, int packedLight, int packedOverlay,
                                float red, float green, float blue, float alpha) {
         main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
-    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(@NotNull T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         if (entity instanceof ReliquaryEntity reliquary) {
             this.top.xRot = (float) Math.toRadians(reliquary.isOpened() ?
                     -70 * Mth.lerp(Minecraft.getInstance().getFrameTime(), reliquary.animationLerp, reliquary.animation) :

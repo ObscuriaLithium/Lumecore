@@ -67,10 +67,12 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
+    maven { url = "https://www.cursemaven.com" }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19-41.1.0'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.1.7'
+    implementation fg.deobf('curse.maven:obscure_api-638417:4132981')
 }
 
 jar {

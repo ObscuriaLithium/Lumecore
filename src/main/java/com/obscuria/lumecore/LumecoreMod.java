@@ -4,8 +4,9 @@ import com.mojang.logging.LogUtils;
 import com.obscuria.lumecore.world.blocks.WallChandelierBlock;
 import com.obscuria.lumecore.world.blocks.WallChandelierLeverBlock;
 import com.obscuria.lumecore.world.blocks.WallChandelierMonoBlock;
-import com.obscuria.lumecore.world.entities.LyingItemEntity;
-import com.obscuria.lumecore.world.entities.ReliquaryEntity;
+import com.obscuria.lumecore.world.entities.AshenWitchEntity;
+import com.obscuria.lumecore.world.entities.props.LyingItemEntity;
+import com.obscuria.lumecore.world.entities.props.ReliquaryEntity;
 import com.obscuria.lumecore.world.items.DebugTool;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
@@ -38,11 +39,12 @@ public class LumecoreMod {
 
     public LumecoreMod() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        bus.addListener(this::commonSetup);
-        Blocks.BLOCKS.register(bus);
-        Items.ITEMS.register(bus);
-        Entities.ENTITY_TYPES.register(bus);
+        LumecoreMod.Blocks.BLOCKS.register(bus);
+        LumecoreMod.Items.ITEMS.register(bus);
+        LumecoreMod.Entities.ENTITY_TYPES.register(bus);
         MinecraftForge.EVENT_BUS.register(this);
+        bus.addListener(this::commonSetup);
+        bus.addListener(LumecoreMod.Entities::registerAttributes);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -95,14 +97,22 @@ public class LumecoreMod {
         public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID);
 
         public static final RegistryObject<EntityType<ReliquaryEntity>> RELIQUARY = register("reliquary",
-                EntityType.Builder.<ReliquaryEntity>of(ReliquaryEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true)
+                EntityType.Builder.<ReliquaryEntity>of(ReliquaryEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(false)
                         .setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(0.5f, 0.5f));
         public static final RegistryObject<EntityType<LyingItemEntity>> LYING_ITEM = register("lying_item",
-                EntityType.Builder.<LyingItemEntity>of(LyingItemEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true)
+                EntityType.Builder.<LyingItemEntity>of(LyingItemEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(false)
                         .setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(0.5f, 0.1f));
+
+        public static final RegistryObject<EntityType<AshenWitchEntity>> ASHEN_WITCH = register("ashen_witch",
+                EntityType.Builder.<AshenWitchEntity>of(AshenWitchEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
+                        .setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(0.6f, 1.7f));
 
         private static <T extends Entity> RegistryObject<EntityType<T>> register(String name, EntityType.Builder<T> entityTypeBuilder) {
             return ENTITY_TYPES.register(name, () -> entityTypeBuilder.build(name));
+        }
+
+        private static void registerAttributes(EntityAttributeCreationEvent event) {
+            event.put(ASHEN_WITCH.get(), AshenWitchEntity.createAttributes().build());
         }
     }
 }

@@ -1,8 +1,9 @@
-package com.obscuria.lumecore.client.renderer;
+package com.obscuria.lumecore.client.renderer.props;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
-import com.obscuria.lumecore.world.entities.LyingItemEntity;
+import com.obscuria.lumecore.LumecoreMod;
+import com.obscuria.lumecore.world.entities.props.LyingItemEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -14,16 +15,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class LyingItemRenderer extends EntityRenderer<LyingItemEntity> {
 
-    protected LyingItemRenderer(EntityRendererProvider.Context context) {
+    public LyingItemRenderer(EntityRendererProvider.Context context) {
         super(context);
     }
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull LyingItemEntity entity) {
-        return new ResourceLocation("lumecore:textures/entities/blank.png");
+        return new ResourceLocation(LumecoreMod.MODID,"textures/entities/blank.png");
     }
 
-    public void render(LyingItemEntity entity, float headYaw, float limbSwing, PoseStack pose, MultiBufferSource source, int i) {
+    public void render(@NotNull LyingItemEntity entity, float headYaw, float limbSwing, @NotNull PoseStack pose, @NotNull MultiBufferSource source, int i) {
         super.render(entity, headYaw, limbSwing, pose, source, i);
         final ItemStack stack = entity.getItem();
         if (!stack.isEmpty() && Minecraft.getInstance().player != null) {

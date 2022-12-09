@@ -1,10 +1,11 @@
-package com.obscuria.lumecore.client.renderer;
+package com.obscuria.lumecore.client.renderer.props;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
-import com.obscuria.lumecore.client.model.ModelReliquary;
-import com.obscuria.lumecore.world.entities.ReliquaryEntity;
+import com.obscuria.lumecore.LumecoreMod;
+import com.obscuria.lumecore.client.model.props.ModelReliquary;
+import com.obscuria.lumecore.world.entities.props.ReliquaryEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -19,17 +20,17 @@ import org.jetbrains.annotations.NotNull;
 public class ReliquaryRenderer extends EntityRenderer<ReliquaryEntity> {
     private final ModelReliquary<ReliquaryEntity> MODEL;
 
-    protected ReliquaryRenderer(EntityRendererProvider.Context context) {
+    public ReliquaryRenderer(EntityRendererProvider.Context context) {
         super(context);
-        MODEL = new ModelReliquary<>(context.bakeLayer(ModelReliquary.LAYER_LOCATION));
+        MODEL = new ModelReliquary<>(context.bakeLayer(ModelReliquary.LAYER));
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(ReliquaryEntity entity) {
-        return new ResourceLocation("lumecore:textures/entities/reliquary.png");
+    public @NotNull ResourceLocation getTextureLocation(@NotNull ReliquaryEntity entity) {
+        return new ResourceLocation(LumecoreMod.MODID,"textures/entities/reliquary.png");
     }
 
-    public void render(ReliquaryEntity entity, float headYaw, float limbSwing, PoseStack pose, MultiBufferSource buffer, int i) {
+    public void render(@NotNull ReliquaryEntity entity, float headYaw, float limbSwing, PoseStack pose, MultiBufferSource buffer, int i) {
         pose.pushPose();
         pose.translate(0.0D, 1.5, 0.0D);
         pose.mulPose(Vector3f.YP.rotationDegrees(180.0F - headYaw));

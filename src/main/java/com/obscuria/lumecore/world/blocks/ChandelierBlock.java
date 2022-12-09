@@ -30,7 +30,7 @@ import net.minecraftforge.common.TierSortingRegistry;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class ChandelierBlock extends Block {
+public abstract class ChandelierBlock extends Block implements ILightSource {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
@@ -95,6 +95,10 @@ public abstract class ChandelierBlock extends Block {
             return InteractionResult.sidedSuccess(world.isClientSide);
         }
         return InteractionResult.PASS;
+    }
+
+    public boolean isLit(BlockState state) {
+        return state.getValue(LIT);
     }
 
     public void setLit(BlockState state, BlockPos pos, Level world, boolean lit) {
