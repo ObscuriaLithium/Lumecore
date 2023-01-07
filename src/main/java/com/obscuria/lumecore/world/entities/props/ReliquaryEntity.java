@@ -1,6 +1,7 @@
 package com.obscuria.lumecore.world.entities.props;
 
-import com.obscuria.lumecore.LumecoreMod;
+import com.obscuria.lumecore.registry.LumecoreEntities;
+import com.obscuria.lumecore.registry.LumecoreItems;
 import com.obscuria.lumecore.world.entities.IMansionProps;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -32,7 +33,7 @@ public class ReliquaryEntity extends Entity implements IMansionProps {
     public float ticksLerp = 0;
 
     public ReliquaryEntity(PlayMessages.SpawnEntity message, Level level) {
-        this(LumecoreMod.Entities.RELIQUARY.get(), level);
+        this(LumecoreEntities.RELIQUARY.get(), level);
     }
     public ReliquaryEntity(EntityType<?> type, Level level) {
         super(type, level);
@@ -81,7 +82,7 @@ public class ReliquaryEntity extends Entity implements IMansionProps {
 
     @Override
     public @NotNull InteractionResult interact(@NotNull Player player, @NotNull InteractionHand hand) {
-        if (player.getItemInHand(hand).getItem() == LumecoreMod.Items.DEBUG_TOOL.get()) {
+        if (player.getItemInHand(hand).getItem() == LumecoreItems.DEBUG_TOOL.get()) {
             this.setYRot(getYRot() + 22.5F);
             return InteractionResult.SUCCESS;
         } else if (this.entityData.get(OPENED)) {
@@ -94,8 +95,7 @@ public class ReliquaryEntity extends Entity implements IMansionProps {
                     this.entityData.set(ITEM, player.getItemInHand(hand));
                     player.setItemInHand(hand, ItemStack.EMPTY);
                 } else {
-                    player.addItem(this.entityData.get(ITEM).copy());
-                    this.entityData.set(ITEM, ItemStack.EMPTY);
+                    if (player.addItem(this.entityData.get(ITEM).copy())) this.entityData.set(ITEM, ItemStack.EMPTY);
                 }
             }
             return InteractionResult.SUCCESS;

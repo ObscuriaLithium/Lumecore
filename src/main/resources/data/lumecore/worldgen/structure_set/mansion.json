@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "lumecore:mansion",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1241756587,
+    "spacing": 100,
+    "separation": 50
+  }
+}

@@ -1,6 +1,7 @@
 package com.obscuria.lumecore.client;
 
 import com.obscuria.lumecore.client.model.ModelAshenWitch;
+import com.obscuria.lumecore.client.model.ModelHive;
 import com.obscuria.lumecore.client.model.props.ModelReliquary;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -13,5 +14,6 @@ public class ModModels {
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ModelReliquary.LAYER, ModelReliquary::createBodyLayer);
         event.registerLayerDefinition(ModelAshenWitch.LAYER, ModelAshenWitch::createBodyLayer);
+        event.registerLayerDefinition(ModelHive.LAYER, ModelHive::createBodyLayer);
     }
 }

@@ -1,0 +1,30 @@
+{
+  "entity.swarm.ambient": {
+    "sounds": [
+      {
+        "name": "lumecore:swarm_ambient_1",
+        "stream": false
+      },
+      {
+        "name": "lumecore:swarm_ambient_2",
+        "stream": false
+      }
+    ]
+  },
+  "entity.swarm.infection": {
+    "sounds": [
+      {
+        "name": "lumecore:swarm_infection",
+        "stream": false
+      }
+    ]
+  },
+  "effect.heartbeat": {
+    "sounds": [
+      {
+        "name": "lumecore:heartbeat",
+        "stream": true
+      }
+    ]
+  }
+}

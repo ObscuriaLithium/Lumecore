@@ -1,6 +1,6 @@
 package com.obscuria.lumecore.world.entities;
 
-import com.obscuria.lumecore.LumecoreMod;
+import com.obscuria.lumecore.registry.LumecoreEntities;
 import com.obscuria.lumecore.world.blocks.ILightSource;
 import com.obscuria.lumecore.world.entities.ai.AttackTargetGoal;
 import com.obscuria.lumecore.world.entities.ai.BlockSearchGoal;
@@ -11,7 +11,6 @@ import com.obscuria.obscureapi.animations.IHekateProvider;
 import com.obscuria.obscureapi.registry.ObscureAPIAttributes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -31,14 +30,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class AshenWitchEntity extends Monster implements IMansionEntity, IHekateProvider, IGoalLimiter {
+public class AshenWitchEntity extends Monster implements IMansionEntity, FromRegeneratingWing, IHekateProvider, IGoalLimiter {
 
     private final HekateProvider ANIMATIONS = new HekateProvider(this);
 
@@ -50,12 +48,7 @@ public class AshenWitchEntity extends Monster implements IMansionEntity, IHekate
     }
 
     public AshenWitchEntity(PlayMessages.SpawnEntity message, Level level) {
-        this(LumecoreMod.Entities.ASHEN_WITCH.get(), level);
-    }
-
-    @Override
-    public @NotNull Packet<?> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+        this(LumecoreEntities.ASHEN_WITCH.get(), level);
     }
 
     @Override

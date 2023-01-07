@@ -1,118 +1,57 @@
 package com.obscuria.lumecore;
 
 import com.mojang.logging.LogUtils;
-import com.obscuria.lumecore.world.blocks.WallChandelierBlock;
-import com.obscuria.lumecore.world.blocks.WallChandelierLeverBlock;
-import com.obscuria.lumecore.world.blocks.WallChandelierMonoBlock;
-import com.obscuria.lumecore.world.entities.AshenWitchEntity;
-import com.obscuria.lumecore.world.entities.props.LyingItemEntity;
-import com.obscuria.lumecore.world.entities.props.ReliquaryEntity;
-import com.obscuria.lumecore.world.items.DebugTool;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.item.BlockItem;
+import com.obscuria.lumecore.registry.*;
+import com.obscuria.lumecore.world.LumecoreEvents;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
+
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 @Mod(LumecoreMod.MODID)
 public class LumecoreMod {
     public static final String MODID = "lumecore";
     public static final Logger LOGGER = LogUtils.getLogger();
+    public static final CreativeModeTab TAB = new CreativeModeTab("lumecore") {
+        @Override @NotNull public ItemStack makeIcon() { return LumecoreItems.BOWL_OF_RICE.get().getDefaultInstance();}};
+    private static final String PROTOCOL_VERSION = "1";
+    public static final SimpleChannel PACKET_HANDLER = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, "main"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
+    private static int messageID = 0;
 
     public LumecoreMod() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        LumecoreMod.Blocks.BLOCKS.register(bus);
-        LumecoreMod.Items.ITEMS.register(bus);
-        LumecoreMod.Entities.ENTITY_TYPES.register(bus);
+
+        LumecoreBlocks.REGISTRY.register(bus);
+        LumecoreItems.REGISTRY.register(bus);
+        LumecoreEntities.REGISTRY.register(bus);
+        LumecoreMobEffects.REGISTRY.register(bus);
+        LumecoreStructures.REGISTRY.register(bus);
+        LumecoreSounds.REGISTRY.register(bus);
+
+        bus.addListener(LumecoreEntities::registerAttributes);
         MinecraftForge.EVENT_BUS.register(this);
-        bus.addListener(this::commonSetup);
-        bus.addListener(LumecoreMod.Entities::registerAttributes);
+        MinecraftForge.EVENT_BUS.addListener(LumecoreEvents::blockPlaced);
+        MinecraftForge.EVENT_BUS.addListener(LumecoreEvents::blockBroken);
+        MinecraftForge.EVENT_BUS.addListener(LumecoreEvents::itemUsed);
+        MinecraftForge.EVENT_BUS.addListener(LumecoreEvents::explosion);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
-        LOGGER.info("HELLO FROM COMMON SETUP");
-    }
-
-
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-        LOGGER.info("HELLO from server starting");
-    }
-
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class ClientModEvents {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-            LOGGER.info("HELLO FROM CLIENT SETUP");
-            LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
-        }
-    }
-
-    public static class Items {
-        public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
-
-        public static final RegistryObject<Item> DEBUG_TOOL = ITEMS.register("debug_tool", DebugTool::new);
-
-        public static final RegistryObject<Item> BASEBOARD = ITEMS.register("baseboard",
-                () -> new BlockItem(Blocks.BASEBOARD.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
-
-        public static final RegistryObject<Item> WALL_CHANDELIER = ITEMS.register("wall_chandelier",
-                () -> new BlockItem(Blocks.WALL_CHANDELIER.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
-        public static final RegistryObject<Item> WALL_CHANDELIER_MONO = ITEMS.register("wall_chandelier_mono",
-                () -> new BlockItem(Blocks.WALL_CHANDELIER_MONO.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
-        public static final RegistryObject<Item> WALL_CHANDELIER_LEVER = ITEMS.register("wall_chandelier_lever",
-                () -> new BlockItem(Blocks.WALL_CHANDELIER_LEVER.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
-    }
-
-    public static class Blocks {
-        public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
-
-        public static final RegistryObject<Block> BASEBOARD = BLOCKS.register("baseboard",
-                () -> new Block(BlockBehaviour.Properties.of(Material.WOOD)));
-
-        public static final RegistryObject<Block> WALL_CHANDELIER = BLOCKS.register("wall_chandelier", WallChandelierBlock::new);
-        public static final RegistryObject<Block> WALL_CHANDELIER_MONO = BLOCKS.register("wall_chandelier_mono", WallChandelierMonoBlock::new);
-        public static final RegistryObject<Block> WALL_CHANDELIER_LEVER = BLOCKS.register("wall_chandelier_lever", WallChandelierLeverBlock::new);
-    }
-
-    public static class Entities {
-        public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID);
-
-        public static final RegistryObject<EntityType<ReliquaryEntity>> RELIQUARY = register("reliquary",
-                EntityType.Builder.<ReliquaryEntity>of(ReliquaryEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(false)
-                        .setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(0.5f, 0.5f));
-        public static final RegistryObject<EntityType<LyingItemEntity>> LYING_ITEM = register("lying_item",
-                EntityType.Builder.<LyingItemEntity>of(LyingItemEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(false)
-                        .setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(0.5f, 0.1f));
-
-        public static final RegistryObject<EntityType<AshenWitchEntity>> ASHEN_WITCH = register("ashen_witch",
-                EntityType.Builder.<AshenWitchEntity>of(AshenWitchEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
-                        .setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(0.6f, 1.7f));
-
-        private static <T extends Entity> RegistryObject<EntityType<T>> register(String name, EntityType.Builder<T> entityTypeBuilder) {
-            return ENTITY_TYPES.register(name, () -> entityTypeBuilder.build(name));
-        }
-
-        private static void registerAttributes(EntityAttributeCreationEvent event) {
-            event.put(ASHEN_WITCH.get(), AshenWitchEntity.createAttributes().build());
-        }
+    public static <T> void addNetworkMessage(Class<T> messageType, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder,
+                                             BiConsumer<T, Supplier<NetworkEvent.Context>> messageConsumer) {
+        PACKET_HANDLER.registerMessage(messageID, messageType, encoder, decoder, messageConsumer);
+        messageID++;
     }
 }

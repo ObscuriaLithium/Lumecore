@@ -1,6 +1,7 @@
 package com.obscuria.lumecore.world.entities.props;
 
-import com.obscuria.lumecore.LumecoreMod;
+import com.obscuria.lumecore.registry.LumecoreEntities;
+import com.obscuria.lumecore.registry.LumecoreItems;
 import com.obscuria.lumecore.world.entities.IMansionProps;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -24,8 +25,9 @@ public class LyingItemEntity extends Entity implements IMansionProps {
     protected static final EntityDataAccessor<ItemStack> ITEM = SynchedEntityData.defineId(LyingItemEntity.class, EntityDataSerializers.ITEM_STACK);
 
     public LyingItemEntity(PlayMessages.SpawnEntity message, Level level) {
-        this(LumecoreMod.Entities.RELIQUARY.get(), level);
+        this(LumecoreEntities.RELIQUARY.get(), level);
     }
+
     public LyingItemEntity(EntityType<?> type, Level level) {
         super(type, level);
         this.blocksBuilding = true;
@@ -76,14 +78,13 @@ public class LyingItemEntity extends Entity implements IMansionProps {
 
     @Override
     public @NotNull InteractionResult interact(@NotNull Player player, @NotNull InteractionHand hand) {
-        if (player.getItemInHand(hand).getItem() == LumecoreMod.Items.DEBUG_TOOL.get()) {
+        if (player.getItemInHand(hand).getItem() == LumecoreItems.DEBUG_TOOL.get()) {
             this.setYRot(getYRot() + 22.5F);
         } else if (this.entityData.get(ITEM).getItem() == Items.AIR) {
             this.entityData.set(ITEM, player.getItemInHand(hand));
             player.setItemInHand(hand, ItemStack.EMPTY);
         } else {
-            player.addItem(this.entityData.get(ITEM));
-            this.kill();
+            if (player.addItem(this.entityData.get(ITEM))) this.kill();
         }
         return InteractionResult.SUCCESS;
     }

@@ -1,0 +1,18 @@
+{
+  "itemGroup.lumecore": "Lumecore",
+
+  "item.lumecore.bowl_of_rice": "Bowl of Rice",
+  "item.lumecore.debug_tool": "Debug Tool",
+  "item.lumecore.twisted_dagger": "Twisted Dagger",
+  "item.lumecore.blood_extract": "Blood Extract",
+  "item.lumecore.large_blood_extract": "Large Blood Extract",
+  "item.lumecore.skeleton_key": "Skeleton Key",
+  "item.lumecore.immunik": "Immunik",
+
+  "item.lumecore.extract.description": "Can only be used>within the Mansion.",
+  "item.lumecore.immunik.description": "Cures Ash Fever and>grants immunity for 30s.>§8Possible side effects.",
+
+  "effect.lumecore.phantom_chains": "§cPhantom Chains",
+  "effect.lumecore.ash_fever": "§cAsh Fever",
+  "effect.lumecore.immunity": "Immunity"
+}
