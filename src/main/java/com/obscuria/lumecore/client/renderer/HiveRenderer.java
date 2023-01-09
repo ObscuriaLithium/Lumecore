@@ -16,7 +16,7 @@ public class HiveRenderer extends MobRenderer<SwarmEntity, ModelHive<SwarmEntity
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull SwarmEntity entity) {
-        return new ResourceLocation(LumecoreMod.MODID, "textures/entities/hive.png");
+        return new ResourceLocation(LumecoreMod.MODID, "textures/entity/hive.png");
     }
 }
 

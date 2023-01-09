@@ -1,12 +1,12 @@
 {
   "parent": "block/cube",
   "textures": {
-    "down": "lumecore:blocks/baseboard_side",
-    "up": "lumecore:blocks/baseboard_side",
-    "north": "lumecore:blocks/baseboard_side",
-    "east": "lumecore:blocks/baseboard_side",
-    "south": "lumecore:blocks/baseboard_side",
-    "west": "lumecore:blocks/baseboard_side",
-    "particle": "lumecore:blocks/baseboard_side"
+    "down": "lumecore:block/baseboard_side",
+    "up": "lumecore:block/baseboard_side",
+    "north": "lumecore:block/baseboard_side",
+    "east": "lumecore:block/baseboard_side",
+    "south": "lumecore:block/baseboard_side",
+    "west": "lumecore:block/baseboard_side",
+    "particle": "lumecore:block/baseboard_side"
   }
 }

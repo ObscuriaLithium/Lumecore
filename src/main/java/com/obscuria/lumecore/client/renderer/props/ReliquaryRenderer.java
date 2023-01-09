@@ -27,7 +27,7 @@ public class ReliquaryRenderer extends EntityRenderer<ReliquaryEntity> {
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull ReliquaryEntity entity) {
-        return new ResourceLocation(LumecoreMod.MODID,"textures/entities/reliquary.png");
+        return new ResourceLocation(LumecoreMod.MODID,"textures/entity/reliquary.png");
     }
 
     public void render(@NotNull ReliquaryEntity entity, float headYaw, float limbSwing, PoseStack pose, MultiBufferSource buffer, int i) {

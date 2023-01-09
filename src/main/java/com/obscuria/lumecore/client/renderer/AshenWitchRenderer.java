@@ -16,7 +16,7 @@ public class AshenWitchRenderer extends MobRenderer<AshenWitchEntity, ModelAshen
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull AshenWitchEntity entity) {
-        return new ResourceLocation(LumecoreMod.MODID, "textures/entities/ashen_witch.png");
+        return new ResourceLocation(LumecoreMod.MODID, "textures/entity/ashen_witch.png");
     }
 }
 

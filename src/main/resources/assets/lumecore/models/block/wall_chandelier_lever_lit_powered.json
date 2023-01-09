@@ -1,9 +1,9 @@
 {
   "parent": "lumecore:custom/wall_chandelier_lever",
   "textures": {
-    "all": "lumecore:blocks/wall_chandelier_lit",
-    "particle": "lumecore:blocks/wall_chandelier_lit",
-    "1": "lumecore:blocks/wall_chandelier_lit"
+    "all": "lumecore:block/wall_chandelier_lit",
+    "particle": "lumecore:block/wall_chandelier_lit",
+    "1": "lumecore:block/wall_chandelier_lit"
   },
   "render_type": "cutout"
 }

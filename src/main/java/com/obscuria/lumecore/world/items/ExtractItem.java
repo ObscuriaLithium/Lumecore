@@ -40,7 +40,7 @@ public class ExtractItem extends Item {
     @Override
     public @NotNull ItemStack finishUsingItem(@NotNull ItemStack stack, @NotNull Level level, @NotNull LivingEntity entity) {
         if (!level.isClientSide)
-            if (LumecoreUtils.isInMansion(entity)) {
+            if (LumecoreUtils.Location.isInMansion(entity)) {
                 for (com.mojang.datafixers.util.Pair<Supplier<MobEffectInstance>, Float> effect : this.effects) {
                     final MobEffectInstance parent = effect.getFirst().get();
                     entity.addEffect(new MobEffectInstance(parent.getEffect(), parent.getDuration(), parent.getAmplifier(), true, false, true));

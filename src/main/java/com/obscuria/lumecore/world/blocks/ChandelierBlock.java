@@ -2,6 +2,8 @@ package com.obscuria.lumecore.world.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -26,6 +28,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.TierSortingRegistry;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,12 +43,12 @@ public abstract class ChandelierBlock extends Block implements ILightSource {
     }
 
     @Override
-    public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
+    public boolean propagatesSkylightDown(@NotNull BlockState state, @NotNull BlockGetter reader, @NotNull BlockPos pos) {
         return true;
     }
 
     @Override
-    public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos) {
+    public int getLightBlock(@NotNull BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos) {
         return 0;
     }
 
@@ -61,11 +64,11 @@ public abstract class ChandelierBlock extends Block implements ILightSource {
         return this.defaultBlockState().setValue(FACING, context.getClickedFace());
     }
 
-    public BlockState rotate(BlockState state, Rotation rot) {
+    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
-    public BlockState mirror(BlockState state, Mirror mirrorIn) {
+    public @NotNull BlockState mirror(BlockState state, Mirror mirrorIn) {
         return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
     }
 
@@ -77,7 +80,7 @@ public abstract class ChandelierBlock extends Block implements ILightSource {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public @NotNull List<ItemStack> getDrops(@NotNull BlockState state, LootContext.@NotNull Builder builder) {
         List<ItemStack> dropsOriginal = super.getDrops(state, builder);
         if (!dropsOriginal.isEmpty()) return dropsOriginal;
         return Collections.singletonList(new ItemStack(this, 1));
@@ -102,6 +105,8 @@ public abstract class ChandelierBlock extends Block implements ILightSource {
     }
 
     public void setLit(BlockState state, BlockPos pos, Level world, boolean lit) {
+        if (lit) world.playSound(null, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1F, 1F);
+        if (!lit) world.playSound(null, pos, SoundEvents.CANDLE_EXTINGUISH, SoundSource.BLOCKS, 1F, 1F);
         world.setBlock(pos, state.setValue(LIT, lit), 11);
     }
 }

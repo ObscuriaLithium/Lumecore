@@ -12,8 +12,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class MansionAreaMobEffect extends MobEffect {
-	public MansionAreaMobEffect() {
+public abstract class MansionMobEffect extends MobEffect {
+	public MansionMobEffect() {
 		super(MobEffectCategory.HARMFUL, -6750055);
 		addAttributeModifier(Attributes.MAX_HEALTH, "1D6F2BA2-1286-46AC-B896-C11C5AAE91CA", -0.5D, AttributeModifier.Operation.MULTIPLY_BASE);
 	}

@@ -6,6 +6,7 @@ import com.obscuria.obscureapi.utils.TextHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -16,6 +17,10 @@ import net.minecraftforge.fml.common.Mod;
 public final class LumecoreClient {
 
     private static int ashFeverTick = 0;
+
+    public static double getDistanceToPlayer(double x, double y, double z) {
+        return Minecraft.getInstance().player == null ? 0 : Minecraft.getInstance().player.getPosition(1F).distanceTo(new Vec3(x, y, z));
+    }
 
     @Mod.EventBusSubscriber(modid = LumecoreMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = {Dist.CLIENT})
     public static class ModEvents {

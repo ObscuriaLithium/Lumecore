@@ -3,7 +3,7 @@ package com.obscuria.lumecore.world.effects;
 
 import org.jetbrains.annotations.NotNull;
 
-public class PhantomChainsMobEffect extends MansionAreaMobEffect {
+public class PhantomChainsMobEffect extends MansionMobEffect {
 	public PhantomChainsMobEffect() {
 		super();
 	}

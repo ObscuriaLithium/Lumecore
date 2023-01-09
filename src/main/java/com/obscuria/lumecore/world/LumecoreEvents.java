@@ -16,17 +16,17 @@ public final class LumecoreEvents {
 
     public static void blockPlaced(BlockEvent.EntityPlaceEvent event) {
         if (event.getEntity() instanceof LivingEntity entity &&
-                LumecoreUtils.isInMansion(entity) && !LumecoreUtils.canBuildInMansion(entity))
+                LumecoreUtils.Location.isInMansion(entity) && !LumecoreUtils.canBuildInMansion(entity))
             event.setCanceled(true);
     }
 
     public static void blockBroken(BlockEvent.BreakEvent event) {
-        if (LumecoreUtils.isInMansion(event.getPlayer()) && !LumecoreUtils.canBuildInMansion(event.getPlayer()))
+        if (LumecoreUtils.Location.isInMansion(event.getPlayer()) && !LumecoreUtils.canBuildInMansion(event.getPlayer()))
             event.setCanceled(true);
     }
 
     public static void itemUsed(LivingEntityUseItemEvent.Start event) {
-        if (LumecoreUtils.isInMansion(event.getEntity()) && (event.getItem().getFoodProperties(event.getEntity()) != null ||
+        if (LumecoreUtils.Location.isInMansion(event.getEntity()) && (event.getItem().getFoodProperties(event.getEntity()) != null ||
         event.getItem().getItem() == Items.MILK_BUCKET) && !LumecoreUtils.isImmune(event.getItem())) {
             final LivingEntity entity = event.getEntity();
             if (event.getEntity().getLevel() instanceof ServerLevel level) {

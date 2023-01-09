@@ -21,7 +21,7 @@ public class LyingItemRenderer extends EntityRenderer<LyingItemEntity> {
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull LyingItemEntity entity) {
-        return new ResourceLocation(LumecoreMod.MODID,"textures/entities/blank.png");
+        return new ResourceLocation(LumecoreMod.MODID,"textures/misc/blank.png");
     }
 
     public void render(@NotNull LyingItemEntity entity, float headYaw, float limbSwing, @NotNull PoseStack pose, @NotNull MultiBufferSource source, int i) {
