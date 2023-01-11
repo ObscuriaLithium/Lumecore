@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class MansionCoreEntity extends Entity {
 
+    private static final EntityDataAccessor<CompoundTag> RULES = SynchedEntityData.defineId(MansionCoreEntity.class, EntityDataSerializers.COMPOUND_TAG);
     private static final EntityDataAccessor<Integer> WING_STATE_1 = SynchedEntityData.defineId(MansionCoreEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> WING_STATE_2 = SynchedEntityData.defineId(MansionCoreEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> WING_STATE_3 = SynchedEntityData.defineId(MansionCoreEntity.class, EntityDataSerializers.INT);
@@ -51,11 +52,20 @@ public class MansionCoreEntity extends Entity {
         this.getEntityData().define(WING_STATE_3, 0);
         this.getEntityData().define(WING_STATE_4, 0);
         this.getEntityData().define(WINGS_UPDATE, 0);
+        final CompoundTag rules = new CompoundTag();
+        rules.putBoolean("canBuild", false);
+        rules.putBoolean("reduceHealth", true);
+        rules.putBoolean("equipmentDecay", true);
+        rules.putBoolean("foodDecay", true);
+        rules.putBoolean("suppressExplosions", true);
+        this.getEntityData().define(RULES, rules);
     }
 
     @Override
     protected void readAdditionalSaveData(@NotNull CompoundTag data) {
         final CompoundTag wings = data.getCompound("Wings");
+        final CompoundTag rules = data.getCompound("Rules");
+        if (!rules.isEmpty()) this.getEntityData().set(RULES, rules);
         this.getEntityData().set(WINGS_UPDATE, wings.getInt("ticks"));
         this.getEntityData().set(WING_STATE_1, wings.getInt("1"));
         this.getEntityData().set(WING_STATE_2, wings.getInt("2"));
@@ -72,6 +82,7 @@ public class MansionCoreEntity extends Entity {
         wings.putInt("3", this.getEntityData().get(WING_STATE_3));
         wings.putInt("4", this.getEntityData().get(WING_STATE_4));
         data.put("Wings", wings);
+        data.put("Rules", this.getEntityData().get(RULES));
     }
 
     @Override
@@ -114,15 +125,7 @@ public class MansionCoreEntity extends Entity {
             this.getEntityData().set(WING_STATE_3, Math.max(0, this.getEntityData().get(WING_STATE_3) - 1));
             this.getEntityData().set(WING_STATE_4, Math.max(0, this.getEntityData().get(WING_STATE_4) - 1));
             final int counts = 1 + (this.random.nextBoolean() && this.random.nextBoolean() ? 1 : 0);
-            for (int i = 0; i < counts; i++) {
-                final int wing = this.random.nextInt(0, 3);
-                switch (wing) {
-                    case 0 -> this.getEntityData().set(WING_STATE_1, 2);
-                    case 1 -> this.getEntityData().set(WING_STATE_2, 2);
-                    case 2 -> this.getEntityData().set(WING_STATE_3, 2);
-                    default -> this.getEntityData().set(WING_STATE_4, 2);
-                }
-            }
+            for (int i = 0; i < counts; i++) this.setWingState(this.random.nextInt(1, 4), 2);
         }
     }
 
@@ -137,6 +140,70 @@ public class MansionCoreEntity extends Entity {
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
+    }
+
+    public boolean getRuleCanBuild() {
+        return this.getRule("canBuild");
+    }
+    public boolean getRuleSuppressExplosions() {
+        return this.getRule("suppressExplosions");
+    }
+    public boolean getRuleReduceHealth() {
+        return this.getRule("reduceHealth");
+    }
+    public boolean getRuleEquipmentDecay() {
+        return this.getRule("equipmentDecay");
+    }
+    public boolean getRuleFoodDecay() {
+        return this.getRule("foodDecay");
+    }
+
+    public void setRuleCanBuild(boolean flag) {
+        this.setRule("canBuild", flag);
+    }
+    public void setRuleSuppressExplosions(boolean flag) {
+        this.setRule("suppressExplosions", flag);
+    }
+    public void setRuleReduceHealth(boolean flag) {
+        this.setRule("reduceHealth", flag);
+    }
+    public void setRuleEquipmentDecay(boolean flag) {
+        this.setRule("equipmentDecay", flag);
+    }
+    public void setRuleFoodDecay(boolean flag) {
+        this.setRule("foodDecay", flag);
+    }
+
+    private boolean getRule(String rule) {
+        return this.getEntityData().get(RULES).getBoolean(rule);
+    }
+
+    private void setRule(String rule, boolean flag) {
+        final CompoundTag rules = this.getEntityData().get(RULES);
+        rules.putBoolean(rule, flag);
+        this.getEntityData().set(RULES, rules);
+    }
+
+    public int getWingsUpdateTick() {
+        return this.getEntityData().get(WINGS_UPDATE);
+    }
+
+    public MansionParts.WingState getWingState(int index) {
+        return switch (index) {
+            default -> MansionParts.WingState.getState(this.getEntityData().get(WING_STATE_1));
+            case 2 -> MansionParts.WingState.getState(this.getEntityData().get(WING_STATE_2));
+            case 3 -> MansionParts.WingState.getState(this.getEntityData().get(WING_STATE_3));
+            case 4 -> MansionParts.WingState.getState(this.getEntityData().get(WING_STATE_4));
+        };
+    }
+
+    public void setWingState(int index, int state) {
+        switch (index) {
+            default -> this.getEntityData().set(WING_STATE_1, Math.min(2, Math.max(0, state)));
+            case 2 -> this.getEntityData().set(WING_STATE_2, Math.min(2, Math.max(0, state)));
+            case 3 -> this.getEntityData().set(WING_STATE_3, Math.min(2, Math.max(0, state)));
+            case 4 -> this.getEntityData().set(WING_STATE_4, Math.min(2, Math.max(0, state)));
+        };
     }
 
     @Override

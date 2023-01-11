@@ -19,6 +19,8 @@ import java.util.function.Consumer;
 
 public final class MansionParts {
 
+    public static final int SIZE = 80;
+
     public static Wing createWing(BlockPos pos1, BlockPos pos2) {
         return new Wing(new AABB(pos1, pos2));
     }

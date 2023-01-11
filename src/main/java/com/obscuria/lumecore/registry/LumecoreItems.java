@@ -5,6 +5,8 @@ import com.obscuria.lumecore.world.items.DebugTool;
 import com.obscuria.lumecore.world.items.ExtractItem;
 import com.obscuria.lumecore.world.items.ImmuneItem;
 import com.obscuria.lumecore.world.items.ImmunikItem;
+import com.obscuria.lumecore.world.items.weapon.BladeOfDeathmark;
+import com.obscuria.lumecore.world.items.weapon.BladeOfVitality;
 import com.obscuria.lumecore.world.items.weapon.TwistedDagger;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -35,6 +37,8 @@ public class LumecoreItems {
             () -> new MobEffectInstance(MobEffects.HEALTH_BOOST, 9000, 3)));
 
     public static final RegistryObject<TwistedDagger> TWISTED_DAGGER = REGISTRY.register("twisted_dagger", TwistedDagger::new);
+    public static final RegistryObject<BladeOfDeathmark> BLADE_OF_DEATHMARK = REGISTRY.register("blade_of_deathmark", BladeOfDeathmark::new);
+    public static final RegistryObject<BladeOfVitality> BLADE_OF_VITALITY = REGISTRY.register("blade_of_vitality", BladeOfVitality::new);
     public static final RegistryObject<Item> SKELETON_KEY = REGISTRY.register("skeleton_key",
             () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(16).tab(LumecoreMod.TAB)));
 

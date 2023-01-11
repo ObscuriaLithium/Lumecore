@@ -49,10 +49,6 @@ public final class LumecoreUtils {
         return stack.getItem() instanceof IImmuneToMansion || (stack.getTag() != null && stack.getTag().getBoolean("ImmuneToMansion"));
     }
 
-    public static boolean canBuildInMansion(LivingEntity entity) {
-        return !entity.hasEffect(LumecoreMobEffects.PHANTOM_CHAINS.get());
-    }
-
     public static void applyPhantomChains(LivingEntity entity) {
         entity.addEffect(new MobEffectInstance(LumecoreMobEffects.PHANTOM_CHAINS.get(), 215, 0, true, false, false));
     }
@@ -72,7 +68,7 @@ public final class LumecoreUtils {
     public static class Location {
 
         public static boolean isInMansion(LivingEntity entity) {
-            return entity.hasEffect(LumecoreMobEffects.PHANTOM_CHAINS.get());
+            return !getCores(entity).isEmpty();
         }
 
         public static boolean isInWing(LivingEntity entity) {
@@ -83,10 +79,19 @@ public final class LumecoreUtils {
             return getWingState(entity) == state;
         }
 
+        public static List<MansionCoreEntity> getCores(LivingEntity entity) {
+            return entity.getLevel().getEntitiesOfClass(MansionCoreEntity.class, new AABB(entity.blockPosition()).inflate(MansionParts.SIZE));
+        }
+
+        public static @Nullable MansionCoreEntity getCore(LivingEntity entity) {
+            final List<MansionCoreEntity> cores = entity.getLevel().getEntitiesOfClass(MansionCoreEntity.class, new AABB(entity.blockPosition()).inflate(MansionParts.SIZE));
+            return cores.isEmpty() ? null : cores.get(0);
+        }
+
         public static @Nullable MansionParts.WingState getWingState(LivingEntity entity) {
-            final List<MansionCoreEntity> coreEntities = entity.getLevel().getEntitiesOfClass(MansionCoreEntity.class, new AABB(entity.blockPosition()).inflate(80));
-            if (coreEntities.isEmpty()) return null;
-            for (MansionParts.Wing wing : coreEntities.get(0).getWings().getAll())
+            final MansionCoreEntity core = getCore(entity);
+            if (core == null) return null;
+            for (MansionParts.Wing wing : core.getWings().getAll())
                 if (wing.getArea().contains(entity.getX(), entity.getY(), entity.getZ())) return wing.getState();
             return null;
         }
