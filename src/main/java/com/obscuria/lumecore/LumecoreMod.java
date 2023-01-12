@@ -45,6 +45,7 @@ public class LumecoreMod {
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.addListener(LumecoreEvents::blockPlaced);
         MinecraftForge.EVENT_BUS.addListener(LumecoreEvents::blockBroken);
+        MinecraftForge.EVENT_BUS.addListener(LumecoreEvents::playerTick);
         MinecraftForge.EVENT_BUS.addListener(LumecoreEvents::itemUsed);
         MinecraftForge.EVENT_BUS.addListener(LumecoreEvents::explosion);
     }

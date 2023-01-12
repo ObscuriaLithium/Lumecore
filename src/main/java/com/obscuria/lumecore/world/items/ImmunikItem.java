@@ -1,6 +1,6 @@
 package com.obscuria.lumecore.world.items;
 
-import com.obscuria.lumecore.registry.LumecoreMobEffects;
+import com.obscuria.lumecore.LumecoreUtils;
 import com.obscuria.obscureapi.utils.TextHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -9,6 +9,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
@@ -29,17 +31,9 @@ public class ImmunikItem extends Item {
 
     @Override
     public @NotNull ItemStack finishUsingItem(@NotNull ItemStack stack, @NotNull Level level, @NotNull LivingEntity entity) {
-        if (!level.isClientSide) {
-            entity.addEffect(new MobEffectInstance(LumecoreMobEffects.IMMUNITY.get(), 600, 0, true, false, true));
-            if (entity.hasEffect(LumecoreMobEffects.ASH_FEVER.get())) {
-                entity.removeEffect(LumecoreMobEffects.ASH_FEVER.get());
-                entity.removeEffect(MobEffects.DARKNESS);
-                entity.removeEffect(MobEffects.WITHER);
-                entity.removeEffect(MobEffects.HUNGER);
-            }
-            if (entity.getRandom().nextInt(10) == 1)
-                entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0, true, false, true));
-        }
+        LumecoreUtils.applyImmunity(entity, 600);
+        if (!level.isClientSide && entity.getRandom().nextInt(10) == 1)
+            entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0, true, false, true));
         stack.shrink(1);
         return stack;
     }
@@ -48,6 +42,17 @@ public class ImmunikItem extends Item {
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> list, @NotNull TooltipFlag flag) {
         list.addAll(TextHelper.build(new ArrayList<>(), "7", "7", TextHelper.translation("item.lumecore.immunik.description")));
         super.appendHoverText(stack, level, list, flag);
+    }
+
+    @Override
+    public boolean overrideStackedOnOther(@NotNull ItemStack stack, @NotNull Slot slot, @NotNull ClickAction action, @NotNull Player player) {
+        if (action == ClickAction.SECONDARY && slot.allowModification(player) && slot.getItem().getCount() == 1 && !LumecoreUtils.isImmune(slot.getItem())) {
+            LumecoreUtils.giveImmunity(List.of(slot.getItem()).iterator());
+            stack.shrink(1);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

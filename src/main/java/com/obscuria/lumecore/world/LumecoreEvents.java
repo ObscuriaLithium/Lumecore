@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.ExplosionEvent;
@@ -25,6 +26,15 @@ public final class LumecoreEvents {
     public static void blockBroken(BlockEvent.BreakEvent event) {
         final MansionCoreEntity core = LumecoreUtils.Location.getCore(event.getPlayer());
         if (core != null && !core.getRuleCanBuild()) event.setCanceled(true);
+    }
+
+    public static void playerTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase == TickEvent.Phase.START || event.player.level.isClientSide) return;
+        if (event.player.tickCount % 20 == 0 && LumecoreUtils.Location.isInMansion(event.player)) {
+            final MansionCoreEntity core = LumecoreUtils.Location.getCore(event.player);
+            if (core != null && core.getRuleEquipmentDecay())
+                LumecoreUtils.decay(event.player, 0.01F, event.player.getAllSlots().iterator(), SoundEvents.ITEM_BREAK);
+        }
     }
 
     public static void itemUsed(LivingEntityUseItemEvent.Start event) {

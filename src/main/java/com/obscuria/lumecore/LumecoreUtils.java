@@ -54,11 +54,25 @@ public final class LumecoreUtils {
     }
 
     public static void applyAshFever(LivingEntity entity, int ticks) {
+        if (entity.level.isClientSide) return;
         if (entity.hasEffect(LumecoreMobEffects.IMMUNITY.get())) return;
-        entity.addEffect(new MobEffectInstance(LumecoreMobEffects.ASH_FEVER.get(), ticks, 0, true, false, true));
-        entity.addEffect(new MobEffectInstance(MobEffects.DARKNESS, ticks, 0, false, false, false));
-        entity.addEffect(new MobEffectInstance(MobEffects.WITHER, ticks, 0, false, false, false));
-        entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, ticks, 0, false, false, false));
+        final int totalTicks = entity.hasEffect(LumecoreMobEffects.ASH_FEVER.get()) ? entity.getEffect(LumecoreMobEffects.ASH_FEVER.get()).getDuration() + ticks : ticks;
+        entity.addEffect(new MobEffectInstance(LumecoreMobEffects.ASH_FEVER.get(), totalTicks, 0, true, false, true));
+        entity.addEffect(new MobEffectInstance(MobEffects.DARKNESS, totalTicks, 0, false, false, false));
+        entity.addEffect(new MobEffectInstance(MobEffects.WITHER, totalTicks, 0, false, false, false));
+        entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, totalTicks, 0, false, false, false));
+    }
+
+    public static void applyImmunity(LivingEntity entity, int ticks) {
+        if (entity.level.isClientSide) return;
+        if (entity.hasEffect(LumecoreMobEffects.ASH_FEVER.get())) {
+            entity.removeEffect(LumecoreMobEffects.ASH_FEVER.get());
+            entity.removeEffect(MobEffects.DARKNESS);
+            entity.removeEffect(MobEffects.WITHER);
+            entity.removeEffect(MobEffects.HUNGER);
+        }
+        final int totalTicks = entity.hasEffect(LumecoreMobEffects.IMMUNITY.get()) ? entity.getEffect(LumecoreMobEffects.IMMUNITY.get()).getDuration() + ticks : ticks;
+        entity.addEffect(new MobEffectInstance(LumecoreMobEffects.IMMUNITY.get(), totalTicks, 0, true, false, true));
     }
 
     public static boolean canBeDespawned(Monster monster) {

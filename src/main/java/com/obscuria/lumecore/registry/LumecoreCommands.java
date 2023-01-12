@@ -8,11 +8,14 @@ import com.obscuria.lumecore.world.entities.props.MansionCoreEntity;
 import com.obscuria.obscureapi.utils.TextHelper;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 @Mod.EventBusSubscriber
 public class LumecoreCommands {
@@ -31,19 +34,21 @@ public class LumecoreCommands {
                     if (player == null) return 0;
                     final MansionCoreEntity core = LumecoreUtils.Location.getCore(player);
                     if (core == null) return sendMessage(player, MANSION_NOT_FOUND);
+                    final List<Monster> monsters = core.getLevel().getEntitiesOfClass(Monster.class, new AABB(core.blockPosition()).inflate(MansionParts.SIZE));
                     player.sendSystemMessage(TextHelper.component(
-                            "The Mansion at " + core.getX() + ", " + core.getY() + ", " + core.getZ() + "\n"
-                                    + "§7  canBuild: §8" + core.getRuleCanBuild() + "\n"
-                                    + "§7  suppressExplosions: §8" + core.getRuleSuppressExplosions() + "\n"
-                                    + "§7  reduceHealth: §8" + core.getRuleReduceHealth() + "\n"
-                                    + "§7  equipmentDecay: §8" + core.getRuleEquipmentDecay() + "\n"
-                                    + "§7  foodDecay: §8" + core.getRuleFoodDecay() + "\n"
-                                    + "§7  Wings Update Tick: §8" + core.getWingsUpdateTick() + "\n"
-                                    + "§7  Wings States: §8"
-                                    + core.getWingState(1).getName() + ", "
-                                    + core.getWingState(2).getName() + ", "
-                                    + core.getWingState(3).getName() + ", "
-                                    + core.getWingState(4).getName()));
+                            "\nThe Mansion at [" + core.getX() + ", " + core.getY() + ", " + core.getZ() + "]"
+                                    + "\nRules: §7canBuild: " + (core.getRuleCanBuild() ? "§2" : "§c") + core.getRuleCanBuild() + "§7, "
+                                    + "§7suppressExplosions: " + (core.getRuleSuppressExplosions() ? "§2" : "§c") + core.getRuleSuppressExplosions() + "§7, "
+                                    + "§7reduceHealth: " + (core.getRuleReduceHealth() ? "§2" : "§c") + core.getRuleReduceHealth() + "§7, "
+                                    + "§7equipmentDecay: " + (core.getRuleEquipmentDecay() ? "§2" : "§c") + core.getRuleEquipmentDecay() + "§7, "
+                                    + "§7foodDecay: " + (core.getRuleFoodDecay() ? "§2" : "§c") + core.getRuleFoodDecay() + "§7, "
+                                    + "§7wingsUpdate: " + (core.getRuleWingsUpdate() ? "§2" : "§c") + core.getRuleWingsUpdate()
+                                    + "\n§fWings: §7tick: §f" + core.getWingsUpdateTick() + "§7, " + "§7states: "
+                                    + core.getWingState(1).getColor() + core.getWingState(1).getName() + "§7, "
+                                    + core.getWingState(2).getColor() + core.getWingState(2).getName() + "§7, "
+                                    + core.getWingState(3).getColor() + core.getWingState(3).getName() + "§7, "
+                                    + core.getWingState(4).getColor() + core.getWingState(4).getName()
+                                    + "\n§fMonsters: §7" + monsters.size()));
                     return 0;
                 }))
                 .then(Commands.literal("location").executes(arguments -> {
@@ -67,9 +72,19 @@ public class LumecoreCommands {
                                         setRule(arguments.getSource().getPlayer(), "equipmentDecay", arguments.getArgument("flag", boolean.class)))))
                                 .then(Commands.literal("foodDecay").then(Commands.argument("flag", BoolArgumentType.bool()).executes(arguments ->
                                         setRule(arguments.getSource().getPlayer(), "foodDecay", arguments.getArgument("flag", boolean.class)))))
+                                .then(Commands.literal("wingsUpdate").then(Commands.argument("flag", BoolArgumentType.bool()).executes(arguments ->
+                                        setRule(arguments.getSource().getPlayer(), "wingsUpdate", arguments.getArgument("flag", boolean.class)))))
                         )
                 )
-                .then(Commands.literal("wing")
+                .then(Commands.literal("wings")
+                        .then(Commands.literal("update").executes(arguments -> {
+                            final ServerPlayer player = arguments.getSource().getPlayer();
+                            if (player == null) return 0;
+                            final MansionCoreEntity core = LumecoreUtils.Location.getCore(player);
+                            if (core == null) return sendMessage(player, MANSION_NOT_FOUND);
+                            core.setWingsUpdateTick(0);
+                            return sendMessage(player, "Wings updated");
+                        }))
                         .then(Commands.literal("set")
                                 .then(Commands.argument("Wing Index", IntegerArgumentType.integer(1, 4))
                                         .then(Commands.literal("healthy").executes(arguments -> {
@@ -111,13 +126,7 @@ public class LumecoreCommands {
         if (player == null) return 0;
         final MansionCoreEntity core = LumecoreUtils.Location.getCore(player);
         if (core == null) return sendMessage(player, MANSION_NOT_FOUND);
-        switch (rule) {
-            case "canBuild" -> core.setRuleCanBuild(flag);
-            case "suppressExplosions" -> core.setRuleSuppressExplosions(flag);
-            case "reduceHealth" -> core.setRuleReduceHealth(flag);
-            case "equipmentDecay" -> core.setRuleEquipmentDecay(flag);
-            default -> core.setRuleFoodDecay(flag);
-        }
+        core.setRule(rule, flag);
         return sendMessage(player, "§7Rule §f" + rule + " §7is now §f" + flag);
     }
 }

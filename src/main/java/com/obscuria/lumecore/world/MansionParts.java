@@ -117,16 +117,18 @@ public final class MansionParts {
     }
 
     public enum WingState {
-        HEALTHY("healthy", 0),
-        REGENERATING("regenerating", 1),
-        INFESTED("infested", 2);
+        HEALTHY("healthy", 0, '2'),
+        REGENERATING("regenerating", 1,'6'),
+        INFESTED("infested", 2, 'c');
 
         private final String NAME;
         private final int INDEX;
+        private final char COLOR;
 
-        WingState(String name, int index) {
+        WingState(String name, int index, char color) {
             this.NAME = name;
             this.INDEX = index;
+            this.COLOR = color;
         }
 
         public String getName() {
@@ -135,6 +137,10 @@ public final class MansionParts {
 
         public int getId() {
             return this.INDEX;
+        }
+
+        public String getColor() {
+            return "§" + this.COLOR;
         }
 
         public static WingState getState(int index) {

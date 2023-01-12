@@ -54,10 +54,11 @@ public class MansionCoreEntity extends Entity {
         this.getEntityData().define(WINGS_UPDATE, 0);
         final CompoundTag rules = new CompoundTag();
         rules.putBoolean("canBuild", false);
+        rules.putBoolean("suppressExplosions", true);
         rules.putBoolean("reduceHealth", true);
         rules.putBoolean("equipmentDecay", true);
         rules.putBoolean("foodDecay", true);
-        rules.putBoolean("suppressExplosions", true);
+        rules.putBoolean("wingsUpdate", true);
         this.getEntityData().define(RULES, rules);
     }
 
@@ -93,7 +94,8 @@ public class MansionCoreEntity extends Entity {
                 this.getEntityData().get(WING_STATE_2),
                 this.getEntityData().get(WING_STATE_3),
                 this.getEntityData().get(WING_STATE_4));
-        if (this.tickCount % 10 == 0) this.level.getEntitiesOfClass(Player.class, new AABB(this.blockPosition(), this.blockPosition()).inflate(60)).forEach(LumecoreUtils::applyPhantomChains);
+        if (this.tickCount % 10 == 0) this.level.getEntitiesOfClass(Player.class, new AABB(this.blockPosition(), this.blockPosition())
+                .inflate(MansionParts.SIZE)).forEach(LumecoreUtils::applyPhantomChains);
         this.updateWingsState();
         this.WINGS.tick(this.tickCount, this.level.isClientSide, this);
         super.tick();
@@ -117,7 +119,7 @@ public class MansionCoreEntity extends Entity {
 
     private void updateWingsState() {
         if (this.level.isClientSide) return;
-        this.getEntityData().set(WINGS_UPDATE, this.getEntityData().get(WINGS_UPDATE) - 1);
+        if (this.getRuleWingsUpdate()) this.getEntityData().set(WINGS_UPDATE, this.getEntityData().get(WINGS_UPDATE) - 1);
         if (this.getEntityData().get(WINGS_UPDATE) <= 0) {
             this.getEntityData().set(WINGS_UPDATE, (int) LumecoreUtils.randomRange(18000, 6000));
             this.getEntityData().set(WING_STATE_1, Math.max(0, this.getEntityData().get(WING_STATE_1) - 1));
@@ -125,7 +127,7 @@ public class MansionCoreEntity extends Entity {
             this.getEntityData().set(WING_STATE_3, Math.max(0, this.getEntityData().get(WING_STATE_3) - 1));
             this.getEntityData().set(WING_STATE_4, Math.max(0, this.getEntityData().get(WING_STATE_4) - 1));
             final int counts = 1 + (this.random.nextBoolean() && this.random.nextBoolean() ? 1 : 0);
-            for (int i = 0; i < counts; i++) this.setWingState(this.random.nextInt(1, 4), 2);
+            for (int i = 0; i < counts; i++) this.setWingState(this.random.nextInt(1, 5), 2);
         }
     }
 
@@ -157,28 +159,15 @@ public class MansionCoreEntity extends Entity {
     public boolean getRuleFoodDecay() {
         return this.getRule("foodDecay");
     }
-
-    public void setRuleCanBuild(boolean flag) {
-        this.setRule("canBuild", flag);
-    }
-    public void setRuleSuppressExplosions(boolean flag) {
-        this.setRule("suppressExplosions", flag);
-    }
-    public void setRuleReduceHealth(boolean flag) {
-        this.setRule("reduceHealth", flag);
-    }
-    public void setRuleEquipmentDecay(boolean flag) {
-        this.setRule("equipmentDecay", flag);
-    }
-    public void setRuleFoodDecay(boolean flag) {
-        this.setRule("foodDecay", flag);
+    public boolean getRuleWingsUpdate() {
+        return this.getRule("wingsUpdate");
     }
 
-    private boolean getRule(String rule) {
+    public boolean getRule(String rule) {
         return this.getEntityData().get(RULES).getBoolean(rule);
     }
 
-    private void setRule(String rule, boolean flag) {
+    public void setRule(String rule, boolean flag) {
         final CompoundTag rules = this.getEntityData().get(RULES);
         rules.putBoolean(rule, flag);
         this.getEntityData().set(RULES, rules);
@@ -186,6 +175,9 @@ public class MansionCoreEntity extends Entity {
 
     public int getWingsUpdateTick() {
         return this.getEntityData().get(WINGS_UPDATE);
+    }
+    public void setWingsUpdateTick(int tick) {
+        this.getEntityData().set(WINGS_UPDATE, tick);
     }
 
     public MansionParts.WingState getWingState(int index) {
