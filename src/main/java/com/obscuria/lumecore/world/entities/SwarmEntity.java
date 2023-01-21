@@ -5,6 +5,7 @@ import com.obscuria.lumecore.LumecoreUtils;
 import com.obscuria.lumecore.network.SwarmInfectionMessage;
 import com.obscuria.lumecore.registry.LumecoreEntities;
 import com.obscuria.lumecore.registry.LumecoreSounds;
+import com.obscuria.lumecore.system.MansionMonster;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -31,7 +32,8 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.PlayMessages;
 import org.jetbrains.annotations.NotNull;
 
-public class SwarmEntity extends Monster implements IMansionEntity, FromInfestedWing {
+@MansionMonster(wing = MansionMonster.Wing.INFESTED)
+public class SwarmEntity extends Monster {
 
     public float hiveScaleTarget = 1F;
     public float swarmScale = 1F;

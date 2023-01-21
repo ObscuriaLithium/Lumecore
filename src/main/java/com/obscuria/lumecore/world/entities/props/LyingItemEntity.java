@@ -2,7 +2,7 @@ package com.obscuria.lumecore.world.entities.props;
 
 import com.obscuria.lumecore.registry.LumecoreEntities;
 import com.obscuria.lumecore.registry.LumecoreItems;
-import com.obscuria.lumecore.world.entities.IMansionProps;
+import com.obscuria.lumecore.system.MansionProps;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -20,7 +20,8 @@ import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import org.jetbrains.annotations.NotNull;
 
-public class LyingItemEntity extends Entity implements IMansionProps {
+@MansionProps
+public class LyingItemEntity extends Entity {
 
     protected static final EntityDataAccessor<ItemStack> ITEM = SynchedEntityData.defineId(LyingItemEntity.class, EntityDataSerializers.ITEM_STACK);
 

@@ -1,10 +1,11 @@
 package com.obscuria.lumecore;
 
 import com.obscuria.lumecore.registry.LumecoreMobEffects;
+import com.obscuria.lumecore.system.DespawnProtection;
+import com.obscuria.lumecore.system.MansionImmunity;
+import com.obscuria.lumecore.system.MansionMonster;
 import com.obscuria.lumecore.world.MansionParts;
-import com.obscuria.lumecore.world.entities.DespawnProtection;
 import com.obscuria.lumecore.world.entities.props.MansionCoreEntity;
-import com.obscuria.lumecore.world.items.IImmuneToMansion;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -41,12 +42,12 @@ public final class LumecoreUtils {
     public static void giveImmunity(Iterator<ItemStack> items) {
         while (items.hasNext()) {
             final ItemStack stack = items.next();
-            if (!(stack.getItem() instanceof IImmuneToMansion)) stack.getOrCreateTag().putBoolean("ImmuneToMansion", true);
+            if (!stack.getItem().getClass().isAnnotationPresent(MansionImmunity.class)) stack.getOrCreateTag().putBoolean("ImmuneToMansion", true);
         }
     }
 
     public static boolean isImmune(ItemStack stack) {
-        return stack.getItem() instanceof IImmuneToMansion || (stack.getTag() != null && stack.getTag().getBoolean("ImmuneToMansion"));
+        return stack.getItem().getClass().isAnnotationPresent(MansionImmunity.class) || (stack.getTag() != null && stack.getTag().getBoolean("ImmuneToMansion"));
     }
 
     public static void applyPhantomChains(LivingEntity entity) {
@@ -76,7 +77,11 @@ public final class LumecoreUtils {
     }
 
     public static boolean canBeDespawned(Monster monster) {
-        return !(monster instanceof DespawnProtection) && !(monster.getTarget() instanceof Player);
+        return !monster.getClass().isAnnotationPresent(DespawnProtection.class) && !(monster.getTarget() instanceof Player);
+    }
+
+    public static MansionMonster.Wing getOriginWing(Monster monster) {
+        return monster.getClass().isAnnotationPresent(MansionMonster.class) ? monster.getClass().getAnnotation(MansionMonster.class).wing() : MansionMonster.Wing.NONE;
     }
 
     public static class Location {

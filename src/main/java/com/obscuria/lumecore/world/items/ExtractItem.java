@@ -55,7 +55,7 @@ public class ExtractItem extends Item {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> list, @NotNull TooltipFlag flag) {
-        list.addAll(TextHelper.build(new ArrayList<>(), "7", "7", TextHelper.translation("item.lumecore.extract.description")));
+        list.addAll(TextHelper.build(new ArrayList<>(), "7", "7", TextHelper.translation("item.lumecore.extract.desc")));
         list.add(TextHelper.component(""));
         for (com.mojang.datafixers.util.Pair<Supplier<MobEffectInstance>, Float> effect : this.effects) {
             final MobEffectInstance parent = effect.getFirst().get();

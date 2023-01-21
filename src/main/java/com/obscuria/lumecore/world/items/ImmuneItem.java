@@ -1,8 +1,10 @@
 package com.obscuria.lumecore.world.items;
 
+import com.obscuria.lumecore.system.MansionImmunity;
 import net.minecraft.world.item.Item;
 
-public class ImmuneItem extends Item implements IImmuneToMansion {
+@MansionImmunity
+public class ImmuneItem extends Item {
 
     public ImmuneItem(Properties properties) {
         super(properties);

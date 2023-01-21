@@ -1,6 +1,7 @@
 package com.obscuria.lumecore.world.entities;
 
 import com.obscuria.lumecore.registry.LumecoreEntities;
+import com.obscuria.lumecore.system.MansionMonster;
 import com.obscuria.lumecore.world.blocks.ILightSource;
 import com.obscuria.lumecore.world.entities.ai.AttackTargetGoal;
 import com.obscuria.lumecore.world.entities.ai.BlockSearchGoal;
@@ -36,7 +37,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class AshenWitchEntity extends Monster implements IMansionEntity, FromRegeneratingWing, IHekateProvider, IGoalLimiter {
+@MansionMonster(wing = MansionMonster.Wing.REGENERATING)
+public class AshenWitchEntity extends Monster implements IHekateProvider, IGoalLimiter {
 
     private final HekateProvider ANIMATIONS = new HekateProvider(this);
 

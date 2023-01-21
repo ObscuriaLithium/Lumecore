@@ -1,11 +1,11 @@
 {
-  "name": "lumecore:mansion/wing_1",
+  "name": "lumecore:mansion/hall",
   "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
-        "location": "lumecore:mansion/wings/wing_common_1",
+        "location": "lumecore:mansion/halls/hall_common_1",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"

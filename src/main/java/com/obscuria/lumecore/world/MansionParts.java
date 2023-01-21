@@ -2,9 +2,8 @@ package com.obscuria.lumecore.world;
 
 import com.obscuria.lumecore.LumecoreClient;
 import com.obscuria.lumecore.LumecoreUtils;
-import com.obscuria.lumecore.world.entities.FromHealthyWing;
-import com.obscuria.lumecore.world.entities.FromInfestedWing;
-import com.obscuria.lumecore.world.entities.FromRegeneratingWing;
+import com.obscuria.lumecore.registry.LumecoreParticles;
+import com.obscuria.lumecore.system.MansionMonster;
 import com.obscuria.lumecore.world.entities.props.MansionCoreEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -40,6 +39,12 @@ public final class MansionParts {
                 final double y = LumecoreUtils.randomRange(center.y + 0.5, this.AREA.getYsize() / 2);
                 final double z = LumecoreUtils.randomRange(center.z + 0.5, this.AREA.getZsize() / 2);
                 if (LumecoreClient.getDistanceToPlayer(x, y, z) <= 8) level.addParticle(ParticleTypes.ASH, x, y, z, 0, 0, 0);
+            }
+            if (Math.random() < 0.3F) {
+                final double x = LumecoreUtils.randomRange(center.x + 0.5, this.AREA.getXsize() / 2);
+                final double y = LumecoreUtils.randomRange(center.y + 0.5, this.AREA.getYsize() / 2);
+                final double z = LumecoreUtils.randomRange(center.z + 0.5, this.AREA.getZsize() / 2);
+                if (LumecoreClient.getDistanceToPlayer(x, y, z) <= 8) level.addParticle(LumecoreParticles.VORTEX.get(), x, y, z, 0, 0, 0);
             }
         }
 
@@ -106,9 +111,12 @@ public final class MansionParts {
 
         public void tick(int tickCount, boolean clientSide, MansionCoreEntity core) {
             if (tickCount % 100 == 0 && !clientSide) forEachWing(wing -> core.level.getEntitiesOfClass(Monster.class, wing.getArea()).forEach(monster -> {
-                    if (wing.getState() == WingState.HEALTHY && !(monster instanceof FromHealthyWing) && LumecoreUtils.canBeDespawned(monster)) monster.discard();
-                    if (wing.getState() == WingState.REGENERATING && !(monster instanceof FromRegeneratingWing) && LumecoreUtils.canBeDespawned(monster)) monster.discard();
-                    if (wing.getState() == WingState.INFESTED && !(monster instanceof FromInfestedWing) && LumecoreUtils.canBeDespawned(monster)) monster.discard();
+                    if (wing.getState() == WingState.HEALTHY && !LumecoreUtils.getOriginWing(monster).equals(MansionMonster.Wing.HEALTHY)
+                            && LumecoreUtils.canBeDespawned(monster)) monster.discard();
+                    if (wing.getState() == WingState.REGENERATING && !LumecoreUtils.getOriginWing(monster).equals(MansionMonster.Wing.REGENERATING)
+                            && LumecoreUtils.canBeDespawned(monster)) monster.discard();
+                    if (wing.getState() == WingState.INFESTED && !LumecoreUtils.getOriginWing(monster).equals(MansionMonster.Wing.INFESTED)
+                            && LumecoreUtils.canBeDespawned(monster)) monster.discard();
                 }));
             if (clientSide) forEachWing(wing -> {
                 if (wing.getState() == WingState.INFESTED) wing.spawnInfectionParticles(core.level);

@@ -36,7 +36,7 @@ public class LumecoreCommands {
                     if (core == null) return sendMessage(player, MANSION_NOT_FOUND);
                     final List<Monster> monsters = core.getLevel().getEntitiesOfClass(Monster.class, new AABB(core.blockPosition()).inflate(MansionParts.SIZE));
                     player.sendSystemMessage(TextHelper.component(
-                            "\nThe Mansion at [" + core.getX() + ", " + core.getY() + ", " + core.getZ() + "]"
+                            "\nThe Mansion at §2[" + core.getBlockX() + ", " + core.getBlockY() + ", " + core.getBlockZ() + "]§f"
                                     + "\nRules: §7canBuild: " + (core.getRuleCanBuild() ? "§2" : "§c") + core.getRuleCanBuild() + "§7, "
                                     + "§7suppressExplosions: " + (core.getRuleSuppressExplosions() ? "§2" : "§c") + core.getRuleSuppressExplosions() + "§7, "
                                     + "§7reduceHealth: " + (core.getRuleReduceHealth() ? "§2" : "§c") + core.getRuleReduceHealth() + "§7, "

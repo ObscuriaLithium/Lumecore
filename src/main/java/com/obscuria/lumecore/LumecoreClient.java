@@ -4,6 +4,8 @@ import com.obscuria.lumecore.registry.LumecoreMobEffects;
 import com.obscuria.lumecore.registry.LumecoreSounds;
 import com.obscuria.obscureapi.utils.TextHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -20,6 +22,10 @@ public final class LumecoreClient {
 
     public static double getDistanceToPlayer(double x, double y, double z) {
         return Minecraft.getInstance().player == null ? 0 : Minecraft.getInstance().player.getPosition(1F).distanceTo(new Vec3(x, y, z));
+    }
+
+    public static void playSound(SoundEvent sound, float volume, float pitch) {
+        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forLocalAmbience(sound, volume, pitch));
     }
 
     @Mod.EventBusSubscriber(modid = LumecoreMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = {Dist.CLIENT})

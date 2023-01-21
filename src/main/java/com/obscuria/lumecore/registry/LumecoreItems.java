@@ -1,10 +1,7 @@
 package com.obscuria.lumecore.registry;
 
 import com.obscuria.lumecore.LumecoreMod;
-import com.obscuria.lumecore.world.items.DebugTool;
-import com.obscuria.lumecore.world.items.ExtractItem;
-import com.obscuria.lumecore.world.items.ImmuneItem;
-import com.obscuria.lumecore.world.items.ImmunikItem;
+import com.obscuria.lumecore.world.items.*;
 import com.obscuria.lumecore.world.items.weapon.BladeOfDeathmark;
 import com.obscuria.lumecore.world.items.weapon.BladeOfVitality;
 import com.obscuria.lumecore.world.items.weapon.TwistedDagger;
@@ -29,6 +26,7 @@ public class LumecoreItems {
 
     public static final RegistryObject<ImmunikItem> IMMUNIK = REGISTRY.register("immunik",
             () -> new ImmunikItem(new Item.Properties().stacksTo(8).tab(LumecoreMod.TAB)));
+    public static final RegistryObject<ImmuneExtractItem> IMMUNE_EXTRACT = REGISTRY.register("immune_extract", ImmuneExtractItem::new);
     public static final RegistryObject<ExtractItem> BLOOD_EXTRACT = REGISTRY.register("blood_extract",
             () -> new ExtractItem(false, new Item.Properties().stacksTo(3).tab(LumecoreMod.TAB),
             () -> new MobEffectInstance(MobEffects.HEALTH_BOOST, 6000, 1)));
@@ -41,6 +39,8 @@ public class LumecoreItems {
     public static final RegistryObject<BladeOfVitality> BLADE_OF_VITALITY = REGISTRY.register("blade_of_vitality", BladeOfVitality::new);
     public static final RegistryObject<Item> SKELETON_KEY = REGISTRY.register("skeleton_key",
             () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(16).tab(LumecoreMod.TAB)));
+    public static final RegistryObject<Item> RUBY_KEY = REGISTRY.register("ruby_key",
+            () -> new Item(new Item.Properties().rarity(Rarity.EPIC).stacksTo(4).tab(LumecoreMod.TAB)));
 
     public static final RegistryObject<Item> BASEBOARD = REGISTRY.register("baseboard",
             () -> new BlockItem(LumecoreBlocks.BASEBOARD.get(), new Item.Properties().tab(LumecoreMod.TAB)));

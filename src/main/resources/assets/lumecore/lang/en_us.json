@@ -1,19 +1,31 @@
 {
   "itemGroup.lumecore": "Lumecore",
 
+  "ability.cost.none": "",
+  "ability.blade_of_deathmark": "Mark of Death>Deals #1%§7 more damage>per target's harmful>effect.",
+  "ability.blade_of_vitality": "Mark of Life>Deals #1%§7 more damage>per target's beneficial>effect.",
+
   "item.lumecore.bowl_of_rice": "Bowl of Rice",
   "item.lumecore.debug_tool": "Debug Tool",
   "item.lumecore.blood_extract": "Blood Extract",
   "item.lumecore.large_blood_extract": "Large Blood Extract",
   "item.lumecore.skeleton_key": "Skeleton Key",
+  "item.lumecore.ruby_key": "Ruby Key",
   "item.lumecore.immunik": "Immunik",
+  "item.lumecore.immune_extract": "Immune Extract",
 
   "item.lumecore.twisted_dagger": "Twisted Dagger",
   "item.lumecore.blade_of_deathmark": "Blade of Deathmark",
   "item.lumecore.blade_of_vitality": "Blade of Vitality",
 
-  "item.lumecore.extract.description": "Can only be used>within the Mansion.",
-  "item.lumecore.immunik.description": "Cures Ash Fever and>grants immunity for 30s.>§8Possible side effects.",
+  "item.lumecore.extract.desc": "Can only be used>within the Mansion.",
+  "item.lumecore.immunik.desc": "Cures Ash Fever and>grants immunity for 30s.>§8Possible side effects.",
+  "item.lumecore.immune_extract.desc": "Makes any item immune>to the mansion.>>{I}§9Hover this item over>§9   any other item in inventory>§9   and right click to apply.",
+
+  "class.lumecore.plague_doctor_weapon": "Plague Doctor Weapon",
+  "class.lumecore.plague_doctor_armor": "Plague Doctor Armor",
+  "class.lumecore.fireborn_weapon": "Fireborn Weapon",
+  "class.lumecore.fireborn_armor": "Fireborn Armor",
 
   "effect.lumecore.phantom_chains": "§cPhantom Chains",
   "effect.lumecore.ash_fever": "§cAsh Fever",

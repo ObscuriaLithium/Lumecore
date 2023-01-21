@@ -3,6 +3,8 @@ package com.obscuria.lumecore;
 import com.mojang.logging.LogUtils;
 import com.obscuria.lumecore.registry.*;
 import com.obscuria.lumecore.world.LumecoreEvents;
+import com.obscuria.obscureapi.ObscureAPI;
+import com.obscuria.obscureapi.world.classes.ObscureClass;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -25,11 +27,13 @@ import java.util.function.Supplier;
 public class LumecoreMod {
     public static final String MODID = "lumecore";
     public static final Logger LOGGER = LogUtils.getLogger();
-    public static final CreativeModeTab TAB = new CreativeModeTab("lumecore") {
-        @Override @NotNull public ItemStack makeIcon() { return LumecoreItems.BOWL_OF_RICE.get().getDefaultInstance();}};
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel PACKET_HANDLER = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, "main"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
     private static int messageID = 0;
+    public static final ObscureClass PLAGUE_DOCTOR = ObscureAPI.Classes.register(new ObscureClass(MODID, "plague_doctor"));
+    public static final ObscureClass FIREBORN = ObscureAPI.Classes.register(new ObscureClass(MODID, "fireborn"));
+    public static final CreativeModeTab TAB = new CreativeModeTab("lumecore") {
+        @Override @NotNull public ItemStack makeIcon() { return LumecoreItems.BOWL_OF_RICE.get().getDefaultInstance();}};
 
     public LumecoreMod() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -40,6 +44,7 @@ public class LumecoreMod {
         LumecoreMobEffects.REGISTRY.register(bus);
         LumecoreStructures.REGISTRY.register(bus);
         LumecoreSounds.REGISTRY.register(bus);
+        LumecoreParticles.REGISTRY.register(bus);
 
         bus.addListener(LumecoreEntities::registerAttributes);
         MinecraftForge.EVENT_BUS.register(this);

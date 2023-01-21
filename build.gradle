@@ -68,12 +68,17 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     maven { url = "https://www.cursemaven.com" }
+
+    flatDir {
+        dirs 'obscuria'
+    }
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.19.2-43.2.0'
+    implementation fg.deobf('obscuria:obscure_api:12')
     //minecraft 'net.minecraftforge:forge:1.19.3-44.0.1'
-    implementation fg.deobf('curse.maven:obscure_api-638417:4132981')
+    //implementation fg.deobf('curse.maven:obscure_api-638417:4287816')
 }
 
 jar {
